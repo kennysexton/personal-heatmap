@@ -14,9 +14,11 @@ const Map = () => {
 
         mapRef.current = new mapboxgl.Map({
             container: mapContainerRef.current,
-            style: 'mapbox://styles/mapbox/dark-v11',
+            style: 'mapbox://styles/mapbox/dark-v11?optimize=true',
             center: [-104.9903, 39.7392],
-            zoom: 2
+            zoom: 5,
+            maxZoom: 17,
+            minZoom: 4,
         });
 
 
@@ -25,7 +27,7 @@ const Map = () => {
             mapRef.current.addSource('earthquakes', {
                 type: 'geojson',
                 // data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
-                data: '../activity_data/output.geojson'
+                data: '../conversions/output_linestring.geojson'
             });
 
             mapRef.current.addLayer(
@@ -33,7 +35,7 @@ const Map = () => {
                     id: 'earthquakes-heat',
                     type: 'heatmap',
                     source: 'earthquakes',
-                    maxzoom: 20,
+
                     paint: {
                         // Increase the heatmap weight based on frequency and property magnitude
                         // A measure of how much an individual point contributes to the heatmap. 
@@ -44,7 +46,7 @@ const Map = () => {
                             ['get', 'mag'],
                             0,
                             0,
-                            6,
+                            12,
                             1
                         ],
                         // Increase the heatmap color weight weight by zoom level
@@ -56,7 +58,7 @@ const Map = () => {
                             1,
                             1,
                             9,
-                            3
+                            2
                         ],
                         // Color ramp for heatmap.  Domain is 0 (low) to 1 (high).
                         // Begin color ramp at 0-stop with a 0-transparancy color
@@ -84,9 +86,9 @@ const Map = () => {
                             ['linear'],
                             ['zoom'],
                             1,
-                            1,
+                            4,
                             9,
-                            8
+                            2
                         ],
                         // Transition from heatmap to circle layer by zoom level
                         'heatmap-opacity': ['interpolate', ['linear'], ['zoom'], 9, 0.8, 20, 0.2]
