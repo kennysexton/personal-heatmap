@@ -11,7 +11,7 @@ Garmin connect has no bulk export option, but Strava does!
 > Bulk Export  
 As of May 25th, 2018, Strava provides the option to export an archive of your account.  
 <br> 
-Your data archive will include the following:  
+> Your data archive will include the following:  
 A zipped folder with all of your activities in their original file format.
 
 
