@@ -31,6 +31,8 @@ gunzip *.gz
 
 `pip install geojson`
 
+`pip install fitparse`
+
 then run
 
 `python gpx_to_geojson.py`

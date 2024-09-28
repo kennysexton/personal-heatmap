@@ -36,5 +36,5 @@ def convert_folder(input_folder, output_file):
 
 if __name__ == '__main__':
     input_folder = '../activity_data'
-    output_file = './output_linestring.geojson'
+    output_file = './outputs/gpx_output.geojson'
     convert_folder(input_folder, output_file)
