@@ -54,11 +54,11 @@ def convert_folder(input_folder, output_file):
                                 longitude = 0
 
 
-                    features = [
+                    features.append(
                         geojson.Feature(
                             geometry=geojson.LineString(coordinates),
                         )
-                    ]
+                    )
                     converted += 1
 
             except Exception as e:

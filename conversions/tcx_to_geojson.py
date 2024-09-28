@@ -46,11 +46,11 @@ def convert_folder(input_folder, output_file):
                 longitude = float(longitude_node.firstChild.nodeValue)
                 coordinates.append((longitude, latitude))
 
-            features = [
+            features.append(
                 geojson.Feature(
                     geometry=geojson.LineString(coordinates),
                 )
-            ]
+            )
             converted += 1
 
     fc = geojson.FeatureCollection(features)
