@@ -26,8 +26,7 @@ const Map = () => {
         mapRef.current.on('load', () => {
             mapRef.current.addSource('earthquakes', {
                 type: 'geojson',
-                // data: 'https://docs.mapbox.com/mapbox-gl-js/assets/earthquakes.geojson'
-                data: '../conversions/output_linestring.geojson'
+                data: '../conversions/outputs/combined.geojson'
             });
 
             mapRef.current.addLayer(

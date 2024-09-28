@@ -10,8 +10,7 @@ Garmin connect has no bulk export option, but Strava does!
 
 > Bulk Export  
 As of May 25th, 2018, Strava provides the option to export an archive of your account.  
-<br> 
-> Your data archive will include the following:  
+Your data archive will include the following:  
 A zipped folder with all of your activities in their original file format.
 
 
@@ -29,8 +28,15 @@ gunzip *.gz
 
 ## Convert all to .geojson for use in heatmap
 `pip install gpxpy`
+
 `pip install geojson`
 
 then run
 
 `python gpx_to_geojson.py`
+
+## Optimizations
+
+Depending on how many data points are being drawn, the browser may kill a memory heavy tab. Here are some optimizations:
+
+- Reduce the coordinate precision to 5 decimal points [GeoJSON Minify](https://open-innovations.github.io/geojson-minify/)
