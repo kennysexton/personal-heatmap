@@ -1,13 +1,15 @@
 import os
 import fitparse
 import geojson
+import argparse
 
-def convert_folder(input_folder, output_file):
+def convert_folder(input_folder, output_file, activityType):
     """Converts all .fit files in a folder to a single GeoJSON file with lines.
 
     Args:
         input_folder (str): Path to the input folder.
         output_file (str): Path to the output GeoJSON file.
+        activityType (str): Activity type. (Running,biking, ect)
     """
     total_files = 0
     skipped = 0
@@ -26,40 +28,48 @@ def convert_folder(input_folder, output_file):
             try:
                 with open(fit_file, 'rb') as f:
                     fitfile = fitparse.FitFile(f)
+
+                    # Should be one session collection with the activity type
+                    correct_sport = False
+                    for session in fitfile.get_messages("session"):
+                        for entry in session:
+                            if entry.name == "sport" and entry.value == activityType:
+                                correct_sport = True
+                                break
             
 
-                    # Empty list of coordinates
-                    coordinates = []
-                    for record in fitfile.get_messages("record"):
-                    # Records can contain multiple pieces of data (ex: timestamp, latitude, longitude, etc)
+                    if correct_sport:
+                        # Empty list of coordinates
+                        coordinates = []
+                        is_first_record = True  # Fix for bug where .FIT files first coordinate sometimes is way of
+                        for record in fitfile.get_messages("record"):
+                        # Records can contain multiple pieces of data (ex: timestamp, latitude, longitude, etc)
 
-                        for data in record:
-
-                            #Print the name and value of the data (and the units if it has any)
-                            # if data.units:
-                            #     print(" * {}: {} ({})".format(data.name, data.value, data.units))
-                            # else:
-                            #     print(" * {}: {}".format(data.name, data.value))
+                            for data in record:
 
 
-                            if(data.name ==  "position_lat" and data.value is not None):
-                                latitude = semicircles_tolatLong(data.value)
-                            elif(data.name ==  "position_long" and data.value is not None):
-                                longitude = semicircles_tolatLong(data.value)
+                                if(data.name ==  "position_lat" and data.value is not None):
+                                    latitude = semicircles_tolatLong(data.value)
+                                elif(data.name ==  "position_long" and data.value is not None):
+                                    longitude = semicircles_tolatLong(data.value)
 
-                            if(latitude != 0 and latitude != 0):
-                                coordinates.append((longitude, latitude))
-                                # Reset values
-                                latitude = 0
-                                longitude = 0
+                                if(latitude != 0 and latitude != 0):
+                                    if(not is_first_record):
+                                        coordinates.append((longitude, latitude))
+                                    # Reset values
+                                    latitude = 0
+                                    longitude = 0
+                                    is_first_record = False
 
 
-                    features.append(
-                        geojson.Feature(
-                            geometry=geojson.LineString(coordinates),
+                        features.append(
+                            geojson.Feature(
+                                geometry=geojson.LineString(coordinates),
+                            )
                         )
-                    )
-                    converted += 1
+                        converted += 1
+                    else:
+                        skipped+= 1
 
             except Exception as e:
                 print(f"Error parsing FIT file: {e}")
@@ -88,4 +98,10 @@ def semicircles_tolatLong(semicircle):
 if __name__ == '__main__':
     input_folder = '../activity_data'
     output_file = './outputs/fit_output.geojson'
-    convert_folder(input_folder, output_file)
+
+    # Activity Type
+    parser = argparse.ArgumentParser(description="What activity type are you looking to convert?")
+    parser.add_argument("activityType", help="Activity type. Ex. running")
+    args = parser.parse_args()
+
+    convert_folder(input_folder, output_file, args.activityType)
