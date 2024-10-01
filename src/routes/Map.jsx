@@ -24,16 +24,16 @@ const Map = () => {
 
 
         mapRef.current.on('load', () => {
-            mapRef.current.addSource('earthquakes', {
+            mapRef.current.addSource('activites', {
                 type: 'geojson',
                 data: '../conversions/outputs/combined.geojson'
             });
 
             mapRef.current.addLayer(
                 {
-                    id: 'earthquakes-heat',
+                    id: 'activites-heat',
                     type: 'heatmap',
-                    source: 'earthquakes',
+                    source: 'activites',
 
                     paint: {
                         // Increase the heatmap weight based on frequency and property magnitude
@@ -111,7 +111,6 @@ const Map = () => {
             //           16,
             //           ['interpolate', ['linear'], ['get', 'mag'], 1, 5, 6, 50]
             //         ],
-            //         // Color circle by earthquake magnitude
             //         'circle-color': [
             //           'interpolate',
             //           ['linear'],
@@ -148,9 +147,11 @@ const Map = () => {
         }
     }, [mapRef]);
 
-    return <div id="map" ref={mapContainerRef} style={{ height: '100%' }}>
-        <div className='absolute z-50 top-0 right-0 text-3xl'>
-            <p className='text-white text-3xl'>zoom: {zoom}</p>
+    return <div className="h-screen">
+        <div id="map" ref={mapContainerRef} style={{ height: '100%' }}>
+            <div className='absolute z-50 top-0 right-0 text-3xl'>
+                <p className='text-white text-3xl'>zoom: {zoom}</p>
+            </div>
         </div>
     </div>;
 };
