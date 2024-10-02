@@ -1,13 +1,14 @@
 import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import HeatmapButton from '../components/HeatmapButton';
+import ScriptExecutor from '../components/ScriptExecutor';
 
 
 function Home() {
     const navigate = useNavigate();
 
-    function runConversionScript() {
-        
-    }
+    // function runConversionScript() {
+    //     <ScriptExecutor/>
+    // }
 
 
     function onViewHeatmapClick() {
@@ -16,7 +17,7 @@ function Home() {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen">
-                <HeatmapButton text='Run Script' onClick={runConversionScript} />
+                <ScriptExecutor/>
                 <HeatmapButton text='View Heatmap' onClick={onViewHeatmapClick} />
         </div>
     )
