@@ -1,8 +1,8 @@
 import express, { json } from 'express';
 import { exec } from 'child_process';
-// eslint-disable-next-line no-undef
 import cors from 'cors';
-// const cors = require('cors');
+import shellQuote from 'shell-quote';
+
 
 const app = express();
 const port = 3000;
@@ -11,17 +11,17 @@ app.use(cors())
 app.use(json());
 
 app.post('/run-script', (req, res) => {
-  const { args } = req.body;
-  console.log(JSON.stringify(req.body))
+  const args = req.body;
+  console.log("Request received at:", new Date().toISOString());
+  console.log("Request body:", req.body);
 
-  if (!args || !Array.isArray(args)) {
+  if (!args || args.length == 0) {
     return res.status(400).json({ error: 'Invalid or missing arguments. Please provide an array of arguments. Script name will be the first argument' });
   }
 
-  // Escape the arguments to prevent command injection
-  const escapedArgs = args.map(arg => JSON.stringify(arg)).join(' ');
+  const escapedArgs = shellQuote.quote(args);
 
-  const pythonCommand = `python /conversions/${escapedArgs}`;
+  const pythonCommand = `python ./conversions/${escapedArgs}`;
   console.log(`Calling: ${pythonCommand}`)
 
   exec(pythonCommand, (error, stdout, stderr) => {

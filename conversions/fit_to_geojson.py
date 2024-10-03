@@ -2,6 +2,7 @@ import os
 import fitparse
 import geojson
 import argparse
+import utils
 
 def convert_folder(input_folder, output_file, activityType):
     """Converts all .fit files in a folder to a single GeoJSON file with lines.
@@ -33,7 +34,7 @@ def convert_folder(input_folder, output_file, activityType):
                     correct_sport = False
                     for session in fitfile.get_messages("session"):
                         for entry in session:
-                            if entry.name == "sport" and entry.value == activityType:
+                            if entry.name == "sport" and entry.value.lower() == activityType:
                                 correct_sport = True
                                 break
             
@@ -81,10 +82,7 @@ def convert_folder(input_folder, output_file, activityType):
     with open(output_file, 'w') as f:
         geojson.dump(fc, f)
 
-    print(f"Total files: {total_files}")
-    print(f"Converted files: {converted}")
-    print(f"Skipped files: {skipped}")
-    print(f"Failed files: {failed}")
+    utils.output_printer(total_files, converted, skipped, failed)
 
 
 def semicircles_tolatLong(semicircle):
@@ -93,11 +91,11 @@ def semicircles_tolatLong(semicircle):
     Thanks to https://gis.stackexchange.com/questions/156887/conversion-between-semicircles-and-latitude-units
     """
 
-    return semicircle * (180 / (2**31))
+    return utils.coordinateRounder(semicircle * (180 / (2**31)))
 
 if __name__ == '__main__':
-    input_folder = '../activity_data'
-    output_file = './outputs/fit_output.geojson'
+    input_folder = './activity_data'
+    output_file = './conversions/outputs/fit_output.geojson'
 
     # Activity Type
     parser = argparse.ArgumentParser(description="What activity type are you looking to convert?")

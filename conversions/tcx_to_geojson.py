@@ -1,13 +1,16 @@
 import os
 from xml.dom import minidom
 import geojson
+import argparse
+import utils
 
-def convert_folder(input_folder, output_file):
+def convert_folder(input_folder, output_file, activityType):
     """Converts all TCX files in a folder to a single GeoJSON file with lines.
 
     Args:
         input_folder (str): Path to the input folder.
         output_file (str): Path to the output GeoJSON file.
+        activityType (str): Activity type. (Running,biking, ect)
     """
 
     total_files = 0
@@ -32,7 +35,7 @@ def convert_folder(input_folder, output_file):
                 continue
 
             activity_node = tcx.getElementsByTagName("Activity")[0]
-            if activity_node.getAttribute("Sport") != "Running":
+            if activity_node.getAttribute("Sport").lower() != activityType:
                 skipped += 1
                 continue # Skip non-running activities
 
@@ -44,7 +47,7 @@ def convert_folder(input_folder, output_file):
                 longitude_node = trackpoint.getElementsByTagName("LongitudeDegrees")[0]
                 latitude = float(latitude_node.firstChild.nodeValue)
                 longitude = float(longitude_node.firstChild.nodeValue)
-                coordinates.append((longitude, latitude))
+                coordinates.append((utils.coordinateRounder(longitude), utils.coordinateRounder(latitude)))
 
             features.append(
                 geojson.Feature(
@@ -61,11 +64,15 @@ def convert_folder(input_folder, output_file):
     except Exception as e:
         print(f"Error writting to output: {e}")
 
-    print(f"Total files: {total_files}")
-    print(f"Converted files: {converted}")
-    print(f"Skipped files: {skipped}")
+    utils.output_printer(total_files, converted, skipped)
 
 if __name__ == '__main__':
-    input_folder = '../activity_data'
-    output_file = './outputs/tcx_output.geojson'
-    convert_folder(input_folder, output_file)
+    input_folder = './activity_data'
+    output_file = './conversions/outputs/tcx_output.geojson'
+
+        # Activity Type
+    parser = argparse.ArgumentParser(description="What activity type are you looking to convert?")
+    parser.add_argument("activityType", help="Activity type. Ex. running")
+    args = parser.parse_args()
+
+    convert_folder(input_folder, output_file, args.activityType)
