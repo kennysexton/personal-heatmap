@@ -35,7 +35,7 @@ def convert_folder(input_folder, output_file, activityType):
                     correct_sport = False
                     for session in fitfile.get_messages("session"):
                         for entry in session:
-                            if entry.name == "sport" and entry.value.lower() == activityType:
+                            if entry.name == "sport" and entry.value.lower() == utils.getActivityType(activityType):
                                 correct_sport = True
                                 break
             

@@ -7,7 +7,6 @@ const Map = () => {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
 
-    const [zoom, setZoom] = useState(0);
     const [activity, setActivity] = useState("running")
     const handleOptionChange = (event) => {
         setActivity(event.target.value);
@@ -100,18 +99,10 @@ const Map = () => {
         });
     }, [activity]);
 
-    useEffect(() => {
-        if (mapRef.current) {
-            mapRef.current.on('zoom', () => {
-                setZoom(mapRef.current.getZoom());
-            });
-        }
-    }, [mapRef]);
-
     return <div className="h-screen">
         <div id="map" ref={mapContainerRef} style={{ height: '100%' }}>
             <div className='absolute z-50 top-0 right-0 text-3xl'>
-                <MapOverlay zoom={zoom} onOptionChange={handleOptionChange}/>
+                <MapOverlay onOptionChange={handleOptionChange}/>
             </div>
         </div>
     </div>;

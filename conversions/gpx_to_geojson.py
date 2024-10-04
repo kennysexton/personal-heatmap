@@ -25,7 +25,10 @@ def convert_folder(input_folder, output_file, activityType):
             with open(gpx_file, 'r') as f:
                 gpx = gpxpy.parse(f)
 
-            if gpx.tracks[0].type.lower() != activityType:
+            # Biking specific check
+            sportType = utils.getActivityType(activityType)
+
+            if gpx.tracks[0].type.lower() != sportType:
                 skipped += 1
                 continue
 

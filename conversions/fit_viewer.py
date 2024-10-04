@@ -16,9 +16,6 @@ def convert_folder(filePath):
         with open(fit_file, 'rb') as f:
             fitfile = fitparse.FitFile(f)
     
-
-            # Empty list of coordinates
-            coordinates = []
             for record in fitfile.get_messages("session"):
             # Records can contain multiple pieces of data (ex: timestamp, latitude, longitude, etc)
 
