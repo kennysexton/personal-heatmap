@@ -10,7 +10,7 @@ const port = 3000;
 app.use(cors())
 app.use(json());
 
-app.post('/run-script', (req, res) => {
+app.post('/convert', (req, res) => {
   const args = req.body;
   console.log("Request received at:", new Date().toISOString());
   console.log("Request body:", req.body);

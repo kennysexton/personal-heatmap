@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import HeatmapButton from './HeatmapButton';
 import ConversionDisplay from './ConversionDisplay';
-import Spinner from './Spinner';
 
 function Scripts({ activityType }) {
 
@@ -17,6 +16,10 @@ function Scripts({ activityType }) {
   const [FITisLoading, setFITIsLoading] = useState(false);
   const [FIToutput, setFITOutput] = useState('');
   const [FITerror, setFITError] = useState('');
+
+  const [CombineisLoading, setCombineIsLoading] = useState(false);
+  const [Combineoutput, setCombineOutput] = useState('');
+  const [Combineerror, setCombineError] = useState('');
 
   // Generic async caller that allows for different set states to be passed in as args
   const useAsyncAction = (setIsLoading, setOutput, setError) => {
@@ -38,7 +41,7 @@ function Scripts({ activityType }) {
   };
 
   const runConversionScripts = async () => {
-    runGPXConversion(fetch, 'http://localhost:3000/run-script', {
+    runGPXConversion(fetch, 'http://localhost:3000/convert', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -46,7 +49,7 @@ function Scripts({ activityType }) {
       body: JSON.stringify(["gpx_to_geojson.py", activityType])
     });
 
-    runTCXConversion(fetch, 'http://localhost:3000/run-script', {
+    runTCXConversion(fetch, 'http://localhost:3000/convert', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -54,7 +57,7 @@ function Scripts({ activityType }) {
       body: JSON.stringify(["tcx_to_geojson.py", activityType])
     });
 
-    runFITConversion(fetch, 'http://localhost:3000/run-script', {
+    runFITConversion(fetch, 'http://localhost:3000/convert', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -63,9 +66,22 @@ function Scripts({ activityType }) {
     });
   };
 
+  const runCombineScript = async () => {
+    runCombine(fetch, 'http://localhost:3000/convert', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(["combine_geojson.py", activityType])
+    });
+
+  };
+
   const runGPXConversion = useAsyncAction(setGPXIsLoading, setGPXOutput, setGPXError)
   const runTCXConversion = useAsyncAction(setTCXIsLoading, setTCXOutput, setTCXError)
   const runFITConversion = useAsyncAction(setFITIsLoading, setFITOutput, setFITError)
+
+  const runCombine = useAsyncAction(setCombineIsLoading, setCombineOutput, setCombineError)
 
   return (
     <div>
@@ -76,8 +92,8 @@ function Scripts({ activityType }) {
         <ConversionDisplay isLoading={FITisLoading} fileFormat=".fit" output={FIToutput} error={FITerror} />
       </div>
 
-      <HeatmapButton onClick={() => runConversionScripts} text={`Combine all ${activityType} outputs`} disabled={true} />
-
+      <HeatmapButton onClick={() => runCombineScript()} text={`Combine all ${activityType} outputs`} />
+      <ConversionDisplay isLoading={CombineisLoading} output={Combineoutput} error={Combineerror} />
     </div>
   );
 };

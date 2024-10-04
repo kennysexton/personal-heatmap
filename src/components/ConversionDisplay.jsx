@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import Spinner from './Spinner';
 
@@ -15,7 +14,6 @@ function ConversionDisplay({ isLoading, fileFormat, output, error }) {
         </div>
     );
 };
-
 
 ConversionDisplay.propTypes = {
     isLoading: PropTypes.bool.isRequired,
