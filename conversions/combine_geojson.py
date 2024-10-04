@@ -13,16 +13,21 @@ def combine_geojson_files(target_folder, activity_type):
     combined = 0
     combined_features = []
     for filename in os.listdir(target_folder):
-        if filename.endswith('.geojson') and activity_type in filename:
-            with open(os.path.join(target_folder, filename), 'r') as f:
-                data = geojson.load(f)
+        # Must be the same activity type
+        if filename.endswith('.geojson') and activity_type in filename.lower():
+            # Only want to combine partials
+            for fileType in constants.SUPPORTED_FILE_FORMATS:
+                if fileType in filename.lower():
+                    
+                  with open(os.path.join(target_folder, filename), 'r') as f:
+                    data = geojson.load(f)
 
-                # Ensure the file is a FeatureCollection
-                if not isinstance(data, geojson.FeatureCollection):
-                    data = geojson.FeatureCollection(data)
+                  # Ensure the file is a FeatureCollection
+                  if not isinstance(data, geojson.FeatureCollection):
+                      data = geojson.FeatureCollection(data)
 
-                combined_features.extend(data.features)
-                combined += 1
+                  combined_features.extend(data.features)
+                  combined += 1
 
     combined_data = geojson.FeatureCollection(combined_features)
 

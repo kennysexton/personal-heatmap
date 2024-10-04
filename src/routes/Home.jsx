@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import HeatmapButton from '../components/HeatmapButton';
 import Scripts from '../components/Scripts';
 import Dropdown from '../components/Dropdown';
 import { DEFAULT_ACTIVITY } from '../constants/activityOptions';
-
 
 function Home() {
     const navigate = useNavigate();
@@ -23,7 +22,7 @@ function Home() {
         <div className="flex flex-col items-center justify-center h-screen">
             <Dropdown value={selectedOption} onChange={handleOptionChange} />
             <Scripts activityType={selectedOption}/>
-            <HeatmapButton text='View Heatmap' onClick={onViewHeatmapClick} disabled={true} />
+            <HeatmapButton text='View Heatmap' onClick={onViewHeatmapClick} disabled={false} />
         </div>
     )
 }

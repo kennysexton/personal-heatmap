@@ -25,6 +25,8 @@ function Scripts({ activityType }) {
   const useAsyncAction = (setIsLoading, setOutput, setError) => {
     const runAsyncAction = async (actionFunction, ...args) => {
       setIsLoading(true);
+      setOutput('');
+      setError('')
 
       try {
         const response = await actionFunction(...args);

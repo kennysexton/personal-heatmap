@@ -1,13 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
-
 import 'mapbox-gl/dist/mapbox-gl.css';
+import MapOverlay from '../components/MapOverlay';
 
 const Map = () => {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
 
     const [zoom, setZoom] = useState(0);
+    const [activity, setActivity] = useState("running")
+    const handleOptionChange = (event) => {
+        setActivity(event.target.value);
+    };
 
     useEffect(() => {
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN
@@ -26,7 +30,7 @@ const Map = () => {
         mapRef.current.on('load', () => {
             mapRef.current.addSource('activites', {
                 type: 'geojson',
-                data: '../conversions/outputs/combined.geojson'
+                data: `../conversions/outputs/${activity}_combined.geojson`
             });
 
             mapRef.current.addLayer(
@@ -94,7 +98,7 @@ const Map = () => {
                 'waterway-label'
             );
         });
-    }, []);
+    }, [activity]);
 
     useEffect(() => {
         if (mapRef.current) {
@@ -107,7 +111,7 @@ const Map = () => {
     return <div className="h-screen">
         <div id="map" ref={mapContainerRef} style={{ height: '100%' }}>
             <div className='absolute z-50 top-0 right-0 text-3xl'>
-                <p className='text-white text-3xl'>zoom: {zoom}</p>
+                <MapOverlay zoom={zoom} onOptionChange={handleOptionChange}/>
             </div>
         </div>
     </div>;
