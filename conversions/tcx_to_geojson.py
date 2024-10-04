@@ -3,6 +3,7 @@ from xml.dom import minidom
 import geojson
 import argparse
 import utils
+import constants
 
 def convert_folder(input_folder, output_file, activityType):
     """Converts all TCX files in a folder to a single GeoJSON file with lines.
@@ -67,12 +68,12 @@ def convert_folder(input_folder, output_file, activityType):
     utils.output_printer(total_files, converted, skipped)
 
 if __name__ == '__main__':
-    input_folder = './activity_data'
-    output_file = './conversions/outputs/tcx_output.geojson'
-
-        # Activity Type
+    # Activity Type
     parser = argparse.ArgumentParser(description="What activity type are you looking to convert?")
     parser.add_argument("activityType", help="Activity type. Ex. running")
     args = parser.parse_args()
+
+    input_folder = constants.ACTIVITY_FILE_PATH
+    output_file = f"{constants.CONVERSION_OUTPUT_PATH}/tcx_{args.activityType}.geojson"
 
     convert_folder(input_folder, output_file, args.activityType)

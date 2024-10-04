@@ -1,40 +1,45 @@
 import geojson
 import argparse
+import os
+import constants
 
-def combine_geojson_files(file1, file2, output_file):
-  """Combines two GeoJSON files into a single FeatureCollection.
+def combine_geojson_files(target_folder, activity_type):
+    """Combines GeoJSON files in a target folder based on activity type.
 
-  Args:
-      file1 (str): Path to the first GeoJSON file.
-      file2 (str): Path to the second GeoJSON file.
-      output_file (str): Path to the output GeoJSON file.
-  """
+    Args:
+        target_folder (str): Path to the target folder.
+        activity_type (str): Activity type. (Running, biking, etc.)
+    """
+    combined = 0
+    combined_features = []
+    for filename in os.listdir(target_folder):
+        if filename.endswith('.geojson') and activity_type in filename:
+            with open(os.path.join(target_folder, filename), 'r') as f:
+                data = geojson.load(f)
 
-  with open(file1, 'r') as f:
-    data1 = geojson.load(f)
+                # Ensure the file is a FeatureCollection
+                if not isinstance(data, geojson.FeatureCollection):
+                    data = geojson.FeatureCollection(data)
 
-  with open(file2, 'r') as f:
-    data2 = geojson.load(f)
+                combined_features.extend(data.features)
+                combined += 1
 
-  # Ensure both files are FeatureCollections
-  if not isinstance(data1, geojson.FeatureCollection):
-    data1 = geojson.FeatureCollection(data1)
-  if not isinstance(data2, geojson.FeatureCollection):
-    data2 = geojson.FeatureCollection(data2)
+    combined_data = geojson.FeatureCollection(combined_features)
 
-  # Combine the features from both FeatureCollections
-  combined_features = data1.features + data2.features
-  combined_data = geojson.FeatureCollection(combined_features)
+    output_file = os.path.join(target_folder, f"{activity_type}_combined.geojson")
+    try:
+      with open(output_file, 'w') as f:
+          geojson.dump(combined_data, f)
+    except Exception as e:
+      print(f"Error writting to output: {e}")
 
-  with open(output_file, 'w') as f:
-    geojson.dump(combined_data, f)
-
+    print(f"Found and combined {combined} .geojson files of type {activity_type}")
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Combine two GeoJSON files")
-    parser.add_argument("file1", help="Path to the first GeoJSON file")
-    parser.add_argument("file2", help="Path to the second GeoJSON file")
-    parser.add_argument("output_file", help="Path to the output GeoJSON file")
+    target_folder = constants.CONVERSION_OUTPUT_PATH
+
+    parser = argparse.ArgumentParser(description="Combine GeoJSON files based on activity type")
+    parser.add_argument("activity_type", help="Activity type")
     args = parser.parse_args()
 
-    combine_geojson_files(args.file1, args.file2, args.output_file)
+    combine_geojson_files(target_folder, args.activity_type)
