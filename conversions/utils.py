@@ -11,9 +11,12 @@ def coordinateRounder(num, digits = 5):
     return round(num, digits)
 
 
-# Bike rides are named differently in .fit and .gpx files
-def getActivityType(activityType):
+# .fit and .gpx use the term cycling instead of biking
+# .fit records are marked as walks even if they are hikes
+def getActivityType(activityType, fileFormat):
     if(activityType == "biking"):
         return "cycling"
+    elif(activityType == "hiking" and fileFormat=='fit'):
+        return "walking"
     else:
         return activityType

@@ -21,13 +21,11 @@ A zipped folder with all of your activities in their original file format.
 - A Strava Account
 
 
-
-
 ## Getting started
 
 You can clone this project to generate your own personal heatmap.
 
-1.) Download your strava data. Once downloaded, unzip `strava bulk export.zip`
+1.) [Bulk download your strava data](https://support.strava.com/hc/en-us/articles/216918437-Exporting-your-Data-and-Bulk-Export#h_01GG58HC4F1BGQ9PQZZVANN6WF). Once downloaded, unzip `strava bulk export.zip`
 
 2.) move the contents of `strava bulk export/activites` into the projects `activities/` directory
 
@@ -59,6 +57,9 @@ There are various activity types. In my case I have `.fit` `.gpx` and `.tcx`
 // unzip all .gz 
 gunzip *.gz
 ```
+
+> [!NOTE]
+> If some of the .fit files are failing conversion. It may be because they should have been named `.fit.gz` but are named `.fit` in the export. Renaming those files and unzipping should fix the issue.
 
 
 ## Optimizations

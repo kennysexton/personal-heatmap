@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HeatmapButton from '../components/HeatmapButton';
 import Dropdown from './Dropdown';
+import PropTypes from 'prop-types';
 
 function MapOverlay({ onOptionChange }) {
     const navigate = useNavigate();
@@ -15,5 +16,9 @@ function MapOverlay({ onOptionChange }) {
         </div>
     )
 }
+
+MapOverlay.propTypes = {
+    onChange: PropTypes.func.isRequired,
+  };
 
 export default MapOverlay;
