@@ -33,7 +33,7 @@ function Scripts({ activityType }) {
         const data = await response.json();
         setOutput(data.output);
       } catch (err) {
-        setError(`Failed to run script: ${err.message}`);
+        setError(`Failed to run script: ${err.code} ${err.message}`);
       } finally {
         setIsLoading(false);
       }

@@ -12,11 +12,21 @@ def coordinateRounder(num, digits = 5):
 
 
 # .fit and .gpx use the term cycling instead of biking
-# .fit records are marked as walks even if they are hikes
-def getActivityType(activityType, fileFormat):
-    if(activityType == "biking"):
-        return "cycling"
-    elif(activityType == "hiking" and fileFormat=='fit'):
-        return "walking"
-    else:
-        return activityType
+# .fit records are marked as walks even if they are hikes (my watch does not have a hike option)
+def checkNotMatchingActivityType(fileActivityType, userSelection):
+
+    bikingOptions = ["cycling" , "biking"]
+    walkingOptions = ["walking", "hiking", "other"]
+
+    if(userSelection == "biking"):
+        if(fileActivityType.lower() in bikingOptions):
+            return False
+    elif(userSelection == "walking"):
+        if(fileActivityType.lower() in walkingOptions):
+            return False
+    elif(userSelection == "skiing"):
+        if("ski" in fileActivityType):
+            return False
+        
+    # Not defined, check only for direct match
+    return fileActivityType.lower() != userSelection

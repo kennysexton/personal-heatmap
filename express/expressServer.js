@@ -24,6 +24,13 @@ app.post('/convert', (req, res) => {
 
   exec(pythonCommand, (error, stdout, stderr) => {
     if (error) {
+
+      // No server or connection error
+      if (error.code === 'ECONNREFUSED' || error.message.includes('ERR_CONNECTION_REFUSED')) {
+        console.error('Server is unavailable.');
+        return res.status(503).json({ error: 'Server is unavailable.' });
+      }
+
       console.error(`exec error: ${error}`);
       return res.status(500).json({ error: error.message });
     }

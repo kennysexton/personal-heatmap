@@ -36,7 +36,7 @@ def convert_folder(input_folder, output_file, activityType):
                 continue
 
             activity_node = tcx.getElementsByTagName("Activity")[0]
-            if activity_node.getAttribute("Sport").lower() != activityType:
+            if utils.checkNotMatchingActivityType(activity_node.getAttribute("Sport"), activityType):
                 skipped += 1
                 continue # Skip non-running activities
 
