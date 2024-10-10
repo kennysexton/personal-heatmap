@@ -4,9 +4,9 @@ import { activityOptions } from '../constants/activityOptions';
 
 function Dropdown({ value, onChange }) {
     return (
-      <select className='text-lg' value={value} onChange={onChange}>
+      <select className='m-5 text-lg bg-[#292929] w-auto' value={value} onChange={onChange}>
         {activityOptions.map((option) => (
-          <option key={option.value} value={option.value} className='text-base'>
+          <option key={option.value} value={option.value} className='text-base bg-[#292929]'>
             {option.label}
           </option>
         ))}

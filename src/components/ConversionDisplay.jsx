@@ -3,7 +3,7 @@ import Spinner from './Spinner';
 
 function ConversionDisplay({ isLoading, task, output, error }) {
     return (
-        <div className='flex m-4 flex-row text-lg text-white'>
+        <div className='flex m-4 flex-row'>
             {isLoading && <Spinner/>}
         
             {task}
