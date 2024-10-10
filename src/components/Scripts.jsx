@@ -91,7 +91,7 @@ function Scripts({ activityType }) {
 
   return (
     <div>
-      <HeatmapButton onClick={() => runConversionScripts()} text='Convert wearable files to a heatmap layer' disabled={GPXisLoading || TCXisLoading || FITisLoading} />
+      <HeatmapButton onClick={() => runConversionScripts()} text={`Convert ${activityType} files to a heatmap layer`} disabled={GPXisLoading || TCXisLoading || FITisLoading} />
       <div className='flex flex-col'>
         <ConversionDisplay isLoading={GPXisLoading} task=".gpx" output={GPXoutput} error={GPXerror} />
         <ConversionDisplay isLoading={TCXisLoading} task=".tcx" output={TCXoutput} error={TCXerror} />

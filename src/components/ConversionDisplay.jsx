@@ -3,9 +3,9 @@ import Spinner from './Spinner';
 
 function ConversionDisplay({ isLoading, task, output, error }) {
     return (
-        <div className='flex m-4 flex-row'>
+        <div className='flex m-4 flex-row text-lg text-white'>
             {isLoading && <Spinner/>}
-            
+        
             {task}
             {output && <pre>{output}</pre>}
             {error && <pre style={{ color: 'red' }}>{error}</pre>}
