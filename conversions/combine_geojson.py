@@ -38,7 +38,7 @@ def combine_geojson_files(target_folder, activity_type):
     except Exception as e:
       print(f"Error writting to output: {e}")
 
-    print(f"Found and combined {combined} .geojson files of type {activity_type}")
+    print(f"Combined {combined} {activity_type} .geojson files")
 
 if __name__ == '__main__':
     target_folder = constants.CONVERSION_OUTPUT_PATH

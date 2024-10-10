@@ -43,7 +43,10 @@ function Scripts({ activityType }) {
   };
 
   const runConversionScripts = async () => {
-    runGPXConversion(fetch, 'http://localhost:3000/convert', {
+    // Show loading even though we are actaully waiting
+    setCombineIsLoading(true)
+
+    const gpxPromise = runGPXConversion(fetch, 'http://localhost:3000/convert', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -51,7 +54,7 @@ function Scripts({ activityType }) {
       body: JSON.stringify(["gpx_to_geojson.py", activityType])
     });
 
-    runTCXConversion(fetch, 'http://localhost:3000/convert', {
+    const tcxPromise = runTCXConversion(fetch, 'http://localhost:3000/convert', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -59,24 +62,25 @@ function Scripts({ activityType }) {
       body: JSON.stringify(["tcx_to_geojson.py", activityType])
     });
 
-    runFITConversion(fetch, 'http://localhost:3000/convert', {
+    const fitPromise = runFITConversion(fetch, 'http://localhost:3000/convert', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(["fit_to_geojson.py", activityType])
     });
-  };
 
-  const runCombineScript = async () => {
-    runCombine(fetch, 'http://localhost:3000/convert', {
+    // Wait for all promises to resolve
+    await Promise.all([gpxPromise, tcxPromise, fitPromise]);
+
+    // All conversions are done, run the combine script
+    await runCombine(fetch, 'http://localhost:3000/convert', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(["combine_geojson.py", activityType])
     });
-
   };
 
   const runGPXConversion = useAsyncAction(setGPXIsLoading, setGPXOutput, setGPXError)
@@ -87,15 +91,15 @@ function Scripts({ activityType }) {
 
   return (
     <div>
-      <HeatmapButton onClick={() => runConversionScripts()} text='Convert wearable files to .geojson' disabled={GPXisLoading || TCXisLoading || FITisLoading} />
+      <HeatmapButton onClick={() => runConversionScripts()} text='Convert wearable files to a heatmap layer' disabled={GPXisLoading || TCXisLoading || FITisLoading} />
       <div className='flex flex-col'>
-        <ConversionDisplay isLoading={GPXisLoading} fileFormat=".gpx" output={GPXoutput} error={GPXerror} />
-        <ConversionDisplay isLoading={TCXisLoading} fileFormat=".tcx" output={TCXoutput} error={TCXerror} />
-        <ConversionDisplay isLoading={FITisLoading} fileFormat=".fit" output={FIToutput} error={FITerror} />
+        <ConversionDisplay isLoading={GPXisLoading} task=".gpx" output={GPXoutput} error={GPXerror} />
+        <ConversionDisplay isLoading={TCXisLoading} task=".tcx" output={TCXoutput} error={TCXerror} />
+        <ConversionDisplay isLoading={FITisLoading} task=".fit" output={FIToutput} error={FITerror} />
+        <ConversionDisplay isLoading={CombineisLoading} task="combine" output={Combineoutput} error={Combineerror} />
       </div>
 
-      <HeatmapButton onClick={() => runCombineScript()} text={`Combine all ${activityType} outputs`} />
-      <ConversionDisplay isLoading={CombineisLoading} output={Combineoutput} error={Combineerror} />
+
     </div>
   );
 };

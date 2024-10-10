@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import MapOverlay from '../components/MapOverlay';
+import MapOverlay from './components/MapOverlay';
+import { DEFAULT_ACTIVITY } from './constants/activityOptions';
 
 const Map = () => {
     const mapContainerRef = useRef(null);
     const mapRef = useRef(null);
 
-    const [activity, setActivity] = useState("running")
+    const [activity, setActivity] = useState(DEFAULT_ACTIVITY)
     const handleOptionChange = (event) => {
         setActivity(event.target.value);
     };
@@ -23,8 +24,6 @@ const Map = () => {
             maxZoom: 17,
             minZoom: 4,
         });
-
-
 
         mapRef.current.on('load', () => {
             mapRef.current.addSource('activites', {
@@ -102,7 +101,7 @@ const Map = () => {
     return <div className="h-screen">
         <div id="map" ref={mapContainerRef} style={{ height: '100%' }}>
             <div className='absolute z-50 top-0 right-0 text-3xl'>
-                <MapOverlay onOptionChange={handleOptionChange}/>
+                <MapOverlay activity={activity} onOptionChange={handleOptionChange} />
             </div>
         </div>
     </div>;

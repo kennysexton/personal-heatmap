@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 
 function HeatmapButton({ onClick, text, disabled = false }) {
   return (
-    <button className={`text-white m-6 px-4 py-2 rounded 
+    <button className={`text-white m-4 px-4 py-2 rounded 
     ${disabled 
           ? 'bg-gray-400' 
           : 'bg-sky-500 hover:bg-sky-400'}
           `} onClick={onClick} disabled={disabled}>
-      {text}
+      <p className='text-base'>{text}</p>
     </button>
   );
 }

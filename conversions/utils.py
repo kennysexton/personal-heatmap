@@ -1,9 +1,9 @@
 # This will be shown on sucessful run of the conversion script
 def output_printer(total, converted, skipped, failed = 0):
     if(failed == 0):
-        print(f"Converted: {converted}/{total}, Skipped: {skipped}")
+        print(f"Converted: {converted}/{total}")
     else:
-        print(f"Converted: {converted}/{total}, Skipped: {skipped}, failed: {failed}")
+        print(f"Converted: {converted}/{total}, failed: {failed}")
 
 
 # Set to 5 digits of rounding if running into performance problems

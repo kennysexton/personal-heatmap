@@ -3,6 +3,7 @@ export const activityOptions = [
     { value: 'biking', label: 'Biking' },
     { value: 'skiing', label: 'Skiing' },
     { value: 'walking', label: 'Hiking & Walking' },
+    { value: 'swimming', label: 'Swimming' },
   ];
   
   // Set a default

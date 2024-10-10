@@ -1,16 +1,8 @@
-import { BrowserRouter, Routes, Route} from 'react-router-dom';
-
-import Map from './routes/Map';
-import Home from './routes/Home';
+import Map from './Map';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home/>} />
-        <Route path='/map' element={<Map/>} />
-      </Routes>
-    </BrowserRouter>
+    <Map />
   )
 }
 
